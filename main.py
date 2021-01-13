@@ -1,24 +1,22 @@
-import random
-import sqlite3
 import sys
-from PyQt5 import uic
+import random
+
 from PyQt5.QtGui import QPainter, QColor
-from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton
+from PyQt5.QtWidgets import QWidget, QApplication, QPushButton
 
 
-
-class MyWidget(QMainWindow):
+class Example(QWidget):
     def __init__(self):
         super().__init__()
-        uic.loadUi('UI.ui', self)
-        self.cm.clicked.connect(self.paint)
+        self.initUI()
+
+    def initUI(self):
+        self.setGeometry(300, 300, 1000, 1000)
+        self.setWindowTitle('Рисование')
+        self.btn = QPushButton('Рисовать', self)
+        self.btn.move(70, 150)
         self.do_paint = False
-        random.randint(20, 100)
-
-
-    def paint(self):
-        self.do_paint = True
-        self.repaint()
+        self.btn.clicked.connect(self.paint)
 
     def paintEvent(self, event):
         if self.do_paint:
@@ -27,21 +25,24 @@ class MyWidget(QMainWindow):
             self.draw_flag(qp)
             qp.end()
 
+    def paint(self):
+        self.do_paint = True
+        self.repaint()
+
     def draw_flag(self, qp):
-        qp.setBrush(QColor(0, 255, 255))
-        ko = random.randint(20, 300)
-        qp.drawEllipse(300, 300, ko, ko)
-
-
-
-
-def except_hook(cls, exception, traceback):
-        sys.excepthook(cls, exception, traceback)
+        qp.setBrush(QColor(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)))
+        r = random.randint(20, 300)
+        qp.drawEllipse(300, 300, r, r)
 
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    ex = MyWidget()
+    ex = Example()
     ex.show()
-    sys.excepthook = ex
-    sys.exit(app.exec_())
+    sys.exit(app.exec())
+
+
+
+
+
+
